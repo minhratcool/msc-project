@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Information</title>
+</head>
+<body>
+    <h1>Get User Information</h1>
+    <form method="POST">
+        <label for="email">Enter Email:</label>
+        <input type="email" name="email" required>
+        <input type="submit" value="Get Information">
+    </form>
+    {% if user_info %}
+        <h2>User Information:</h2>
+        <p><strong>Name:</strong> {{ user_info['name'] }}</p>
+        <p><strong>Age:</strong> {{ user_info['age'] }}</p>
+        <p><strong>Title:</strong> {{ user_info['title'] }}</p>
+        <p><strong>Job Description:</strong> {{ user_info['job_description'] }}</p>
+        <p><strong>Supervisor:</strong> {{ user_info['supervisor'] }}</p>
+    {% endif %}
+</body>
+</html>

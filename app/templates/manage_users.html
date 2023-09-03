@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+    <style>
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-top: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Manage Users</h1>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Title</th>
+                    <th>Job Description</th>
+                    <th>Supervisor</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user['email'] }}</td>
+                        <td>{{ user['name'] }}</td>
+                        <td>{{ user['age'] }}</td>
+                        <td>{{ user['title'] }}</td>
+                        <td>{{ user['job_description'] }}</td>
+                        <td>{{ user['supervisor'] }}</td>
+                        <td>
+                            <a href="{{ url_for('user_profile', user_email=user.email) }}" class="btn btn-info btn-sm">View Profile</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Total Chats Chart -->
+        <canvas id="totalChatsChart" width="300" height="75"></canvas>
+            
+        <!-- Positive Total Chart -->
+        <canvas id="positiveTotalChart" width="300" height="75"></canvas>
+        
+        <!-- Negative Total Chart -->
+        <canvas id="negativeTotalChart" width="300" height="75"></canvas>
+    </div>
+    
+
+    <script>
+        // Extract data for charts
+        var emails = [];
+        var totalChatsData = [];
+        var positiveTotalData = [];
+        var negativeTotalData = [];
+        var privateChatsData = []; // New data array for private chats
+        var publicChatsData = []; // New data array for public chats
+
+        {% for user in users %}
+            emails.push('{{ user.email }}');
+            totalChatsData.push({{ user.total_chats }});
+            positiveTotalData.push({{ user.positive_total }});
+            negativeTotalData.push({{ user.negative_total }});
+            privateChatsData.push({{ user.private_chats }}); // Add private chats data
+            publicChatsData.push({{ user.public_chats }});
+        {% endfor %}
+
+        // Total Chats Chart
+        new Chart(document.getElementById("totalChatsChart"), {
+            type: 'bar',
+            data: {
+                labels: emails,
+                datasets: [
+                    {
+                        label: 'Total Chats',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        data: totalChatsData
+                    },
+                    {
+                        label: 'Private Chats', // Label for private chats
+                        backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                        borderColor: 'rgba(255, 205, 86, 1)',
+                        borderWidth: 1,
+                        data: privateChatsData
+                    },
+                    {
+                        label: 'Public Chats', // Label for public chats
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: publicChatsData
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Positive Total Chart
+        new Chart(document.getElementById("positiveTotalChart"), {
+            type: 'bar',
+            data: {
+                labels: emails,
+                datasets: [{
+                    label: 'Positive Total',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 1)',
+                    borderWidth: 1,
+                    data: positiveTotalData
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Negative Total Chart
+        new Chart(document.getElementById("negativeTotalChart"), {
+            type: 'bar',
+            data: {
+                labels: emails,
+                datasets: [{
+                    label: 'Negative Total',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    data: negativeTotalData
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+        <p>Created by Minh Tran - 2023</p>
+    </footer>
+</body>
+</html>

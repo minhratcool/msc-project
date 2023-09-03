@@ -1,0 +1,403 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .content-container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #333;
+        }
+        .chat-catalog {
+            list-style: none;
+            padding: 0;
+        }
+        .chat-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .chat-item h3 {
+            margin: 0;
+        }
+        .chat-meta {
+            color: #777;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="content-container">
+        <h1>User Profile</h1>
+        <h2>{{ user.name }}</h2>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Age:</strong> {{ user.age }}</p>
+        <p><strong>Title:</strong> {{ user.title }}</p>
+        <p><strong>Job Description:</strong> {{ user.job_description }}</p>
+        <p><strong>Supervisor:</strong> {{ user.supervisor }}</p>
+
+        <h2>Chatted With</h2>
+        <ul class="chat-catalog">
+            {% for convo in chatted_with %}
+                <li class="chat-item">
+                    <h3>{{ convo.channel_type }}</h3>
+                    <p class="chat-meta">
+                        Chatted with: {{ convo.chat_with }} &nbsp;|&nbsp;
+                        Total Chats: {{ convo.total_chats }}
+                    </p>
+                    <p>
+                        Negative Rate: {{ convo.negative_rate }} &nbsp;|&nbsp;
+                        Positive Rate: {{ convo.positive_rate }} &nbsp;|&nbsp;
+                        Neutral Rate: {{ convo.neutral_rate }}
+                    </p>
+                </li>
+                <li>
+                    <div class="chart-container">
+                        <canvas id="chart-{{ loop.index }}"></canvas>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <script>
+            {% for convo in chatted_with %}
+            var ctx{{ loop.index }} = document.getElementById('chart-{{ loop.index }}').getContext('2d');
+            var data{{ loop.index }} = {
+                labels: ['Negative', 'Positive', 'Neutral'],
+                datasets: [{
+                    data: [
+                        {{ convo.negative_rate }},
+                        {{ convo.positive_rate }},
+                        {{ convo.neutral_rate }}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)', // Negative (red)
+                        'rgba(75, 192, 192, 0.5)', // Positive (green)
+                        'rgba(255, 205, 86, 0.5)'  // Neutral (yellow)
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 205, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            var options{{ loop.index }} = {
+                responsive: true
+            };
+            var pieChart{{ loop.index }} = new Chart(ctx{{ loop.index }}, {
+                type: 'pie',
+                data: data{{ loop.index }},
+                options: options{{ loop.index }}
+            });
+            {% endfor %}
+        </script>
+    </div>
+</body>
+</html> -->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <style>
+        /* Your existing styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .content-container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #333;
+        }
+        .chat-catalog {
+            list-style: none;
+            padding: 0;
+        }
+        .chat-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .chat-item h3 {
+            margin: 0;
+        }
+        .chat-meta {
+            color: #777;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        <h2>{{ user.name }}</h2>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Age:</strong> {{ user.age }}</p>
+        <p><strong>Title:</strong> {{ user.title }}</p>
+        <p><strong>Job Description:</strong> {{ user.job_description }}</p>
+        <p><strong>Supervisor:</strong> {{ user.supervisor }}</p>
+
+        <h2>Chatted With</h2>
+        <svg width="800" height="600"></svg>
+
+        <!-- Bootstrap Modal for Conversation Details -->
+        <div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="popupModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="popupModalLabel">Conversation Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 id="modal-label"></h3>
+                        <p id="modal-channel-type"></p>
+                        <p id="modal-chat-with"></p>
+                        <p id="modal-total-chats"></p>
+                        <p id="modal-negative-rate"></p>
+                        <p id="modal-positive-rate"></p>
+                        <p id="modal-neutral-rate"></p>
+                        <canvas id="modal-chart" width="200" height="200"></canvas>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        var nodes = [{ id: 'user', name: '{{ user.name }}', convo: null }];
+        {% for convo in chatted_with %}
+            var convoData = {
+                negative_rate: {{ convo.negative_rate }},
+                positive_rate: {{ convo.positive_rate }},
+                neutral_rate: {{ convo.neutral_rate }},
+                channel_type: '{{ convo.channel_type }}',
+                chat_with: '{{ convo.chat_with }}',
+                total_chats: {{ convo.total_chats }}
+            };
+            nodes.push({ id: {{ loop.index }}, name: '{{ convo.chat_with }}', convo: convoData });
+        {% endfor %}
+
+        var links = [];
+        for (var i = 1; i < nodes.length; i++) {
+            links.push({ source: 'user', target: i });
+        }
+
+        var width = 800;
+        var height = 600;
+        var svg = d3.select('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        var simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links).id(d => d.id).distance(150)) // Adjust distance here
+            .force('charge', d3.forceManyBody().strength(-400))
+            .force('center', d3.forceCenter(width / 2, height / 2));
+
+        var link = svg.selectAll('.link')
+            .data(links)
+            .enter().append('line')
+            .attr('class', 'link')
+            .attr('marker-end', 'url(#arrowhead)') // Add arrowhead to the end of the line
+            .style('stroke', '#999')
+            .style('stroke-width', 2); // Adjust the stroke width
+
+        svg.append('defs').append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '-0 -5 10 10')
+            .attr('refX', 15)
+            .attr('refY', 0)
+            .attr('orient', 'auto')
+            .attr('markerWidth', 13)
+            .attr('markerHeight', 13)
+            .attr('xoverflow', 'visible')
+            .append('svg:path')
+            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+            .attr('fill', '#999');
+
+        var nodeRadius = 30;
+
+        var node = svg.selectAll('.node')
+            .data(nodes)
+            .enter().append('circle')
+            .attr('class', 'node')
+            .attr('r', function(d) {
+                return d.id === 'user' ? nodeRadius * 1.5 : nodeRadius; // Make root node larger
+            })
+            .style('fill', function(d) {
+                return d.id === 'user' ? 'orange' : 'steelblue'; // Different colors for root and child nodes
+            })
+            .call(d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended))
+            .on('click', function(event, d) {
+                showPopup(d);
+            });
+
+        var label = svg.selectAll('.label')
+            .data(nodes)
+            .enter().append('text')
+            .attr('class', 'label')
+            .attr('dy', -15)
+            .text(d => d.name);
+
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+
+            label
+                .attr('x', d => d.x)
+                .attr('y', d => d.y);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        var currentChart;
+
+        function destroyChart() {
+            if (currentChart) {
+                currentChart.destroy();
+            }
+        }
+
+        function showPopup(d) {
+            if (d.convo === null) return;
+
+            $('#modal-label').text(d.name);
+            var convo = d.convo;
+            console.log(d);
+            $('#modal-channel-type').text(convo.channel_type);
+            $('#modal-chat-with').text('Chatted with: ' + convo.chat_with);
+            $('#modal-total-chats').text('Total Chats: ' + convo.total_chats);
+            $('#modal-negative-rate').text('Negative Rate: ' + convo.negative_rate);
+            $('#modal-positive-rate').text('Positive Rate: ' + convo.positive_rate);
+            $('#modal-neutral-rate').text('Neutral Rate: ' + convo.neutral_rate);
+
+            var ctx = document.getElementById('modal-chart').getContext('2d');
+            // Destroy the previous chart
+            destroyChart();
+
+            var data = {
+                labels: ['Negative', 'Positive', 'Neutral'],
+                datasets: [{
+                    data: [convo.negative_rate, convo.positive_rate, convo.neutral_rate],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(255, 205, 86, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 205, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            currentChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true
+                }
+            });
+
+            $('#popupModal').modal('show');
+        }
+    </script>
+    
+</body>
+</html>
