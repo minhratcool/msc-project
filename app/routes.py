@@ -9,7 +9,7 @@ import json
 analyzer = SentimentAnalyzer()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         user_email = request.form.get('email')
@@ -18,7 +18,7 @@ def index():
     return render_template('index.html', user_info=None)
 
 
-@app.route('/manage_users', methods=['GET'])
+@app.route('/', methods=['GET'])
 def manage_users():
     users = User.query.all()
     users_with_stats = []
@@ -77,12 +77,15 @@ def create_chat():
     user_email = data.get('user_email')
     text = data.get('text')
 
+    print(channel_id)
+
     if channel_id is None or user_email is None or text is None:
         return jsonify({'error': 'Missing required fields'}), 400
 
     # Create a new chat and add it to the database
     sentiment = analyzer.analyze_sentiment(text)[0].get('label').upper()
     new_chat = Chat(user_email = user_email, channel_id = channel_id, sentiment = sentiment, created_date = datetime.utcnow())
+    print(new_chat)
     db.session.add(new_chat)
     db.session.commit()
 
